@@ -15,115 +15,97 @@
  *  limitations under the License.
  */
 
-var connect = require('../lib/leafnode').connect;
 var assert = require('assert');
+
+var o = require('@carbon-io/atom').o(module).main
+var oo = require('@carbon-io/atom').oo(module)
+var _o = require('@carbon-io/bond')._o(module)
+
+var connect = require('../lib/leafnode').connect;
+var util = require('./util')
+
 var numDocs = 100
 
-/****************************************************************************************************
- * run
- */
-function run() {
-  console.log("Testing find()");
+var findTests = o({
+  _type: util.LeafnodeTestSuite,
+  name: 'FindTests',
+  description: 'find tests',
+  colName: 'leafnode.find-test',
+  makeObj: function(i) {
+    return { 
+      i : i,
+      iField : 22,
+      ddField : 22.2,
+      bField : true,
+      b2Field : false,
+      nField : null,
+      dField : new Date(123000000),
+      aField : [1, null, true, [1, 2, 3], { a: 1, b: null, c: [] }],
+      oField : { a: 1, b: false, c: [{}, 0], d: { ee : 1, ff : 2 }}
+    }
+  },
+  tests: [
+    o({
+      _type: util.LeafnodeTest,
+      name: 'cursorTest',
+      description: 'cursor test',
+      doTest: function() {
+        var obj = undefined
 
-  var db = connect("mongodb://localhost:27017");
+        for (var i = 0; i < numDocs; i++) {
+          obj = this.parent.makeObj(i)
+          this.c.insert(obj)
+        }
 
-  var c = db.getCollection("leafnode.find-test");
+        var j = 0
+        var cursor = this.c.find({})
+        while (obj = cursor.next()) {
+          j++
+        }
+        assert.equal(j, numDocs)
+      }
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'arrayTest',
+      description: 'array test',
+      doTest: function() {
+        var obj = undefined
+        for (var i = 0; i < numDocs; i++) {
+          obj = this.parent.makeObj(i)
+          this.c.insert(obj)
+        }
+        
+        var all = this.c.find().toArray()
+        assert.equal(all.length, numDocs)
+        
+        var o = this.parent.makeObj(0)
+        for (var i in all) {
+          var a = all[i]
+          assert.equal(o.iField, a.iField)
+          assert.equal(o.ddField, a.ddField)
+          assert.equal(o.bField, a.bField)
+          assert.equal(o.b2Field, a.b2Field)
+          assert.equal(o.dField.getTime(), a.dField.getTime())
+          assert.equal(o.nField, a.nField)
+          assert.deepEqual(o.aField, a.aField)
+          assert.deepEqual(o.oField, a.oField)
+        }
+      }
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'findOneTest',
+      description: 'findOne test',
+      doTest: function() {
+        var obj = {_id: 0}
+        this.c.insert(obj)
+        var result = this.c.findOne({_id: 0})
+        assert.deepEqual(obj, result)
+      }
+    })
+  ]
+})
 
-  // test
-  try {
-    testCursor(c);
-    testArray(c);
-    testFindOne(c)
-  } catch (e) {
-    throw e;
-  } finally {
-    // cleanup
-    c.drop();
-    db.close();
-  }
-}
+module.exports = findTests
 
-/****************************************************************************************************
- * testCursor
- */
-function testCursor(c) {
-  for (var i = 0; i < numDocs; i++) {
-    var obj = makeObj(i);
-    c.insert(obj);
-  }
-
-  var j = 0;
-  var cursor = c.find({});
-  var obj;
-  while (obj = cursor.next()) {
-    j++;
-  }
-  assert.equal(j, numDocs);
-}
-
-/****************************************************************************************************
- * testArray
- */
-function testArray(c) {
-  c.drop();
-  for (var i = 0; i < numDocs; i++) {
-    var obj = makeObj(i);
-    c.insert(obj);
-  }
-  
-  var all = c.find().toArray();
-  assert.equal(all.length, numDocs);
-  
-  var o = makeObj(0);
-  for (var i in all) {
-    var a = all[i];
-    assert.equal(o.iField, a.iField);
-    assert.equal(o.ddField, a.ddField);
-    assert.equal(o.bField, a.bField);
-    assert.equal(o.b2Field, a.b2Field);
-    assert.equal(o.dField.getTime(), a.dField.getTime());
-    assert.equal(o.nField, a.nField);
-    assert.deepEqual(o.aField, a.aField);
-    assert.deepEqual(o.oField, a.oField);
-  }
-};
-
-/****************************************************************************************************
- * testFindOne
- */
-function testFindOne(c) {
-  c.drop();
-  var obj = {_id: 0};
-  c.insert(obj);
-  var result = c.findOne({_id: 0});
-  assert.deepEqual(obj, result);
-}
-
-/****************************************************************************************************
- * makeObj
- */
-function makeObj(i) {
-  return { 
-    i : i,
-    iField : 22,
-    ddField : 22.2,
-    bField : true,
-    b2Field : false,
-    nField : null,
-    dField : new Date(123000000),
-    aField : [1, null, true, [1, 2, 3], { a: 1, b: null, c: [] }],
-    oField : { a: 1, b: false, c: [{}, 0], d: { ee : 1, ff : 2 }}
-  };
-};
-
-/****************************************************************************************************
- * main
- */
-if (require.main == module) {
-  run();
-}
-
-/****************************************************************************************************
- * exports
- */
-exports.run = run;

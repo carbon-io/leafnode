@@ -15,23 +15,18 @@
  *  limitations under the License.
  */
 
-var __ = require('@carbon-io/fibers').__(module)
+var o = require('@carbon-io/atom').o(module).main
+var _o = require('@carbon-io/bond')._o(module)
+var testtube = require('@carbon-io/test-tube')
 
-/****************************************************************************************************
- * run
- */
-function run() {
-  __(function() {
-    require('./find').run()
-    require('./insert').run()
-    require('./update').run()
-    require('./distinct').run()
-  });
-};
+module.exports = o({
+  _type: testtube.Test,
+  name: 'LeafnodeTests',
+  tests: [
+    _o('./find')
+    //_o('./insert'),
+    //_o('./update'),
+    //_o('./distinct')
+  ]
+})
 
-/****************************************************************************************************
- * main
- */
-if (require.main == module) {
-  run()
-}
