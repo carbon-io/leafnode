@@ -24,8 +24,8 @@ module.exports = o({
   name: 'LeafnodeTests',
   tests: [
     _o('./find'),
-    //_o('./insert'),
-    //_o('./update'),
+    _o('./insert'),
+    _o('./update'),
     _o('./distinct')
   ]
 })

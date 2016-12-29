@@ -15,54 +15,37 @@
  *  limitations under the License.
  */
 
-var connect = require('../lib/leafnode').connect;
 var assert = require('assert');
 
-/****************************************************************************************************
- * run
- */
-function run() {
-  console.log("Testing update()");
+var o = require('@carbon-io/atom').o(module).main
+var oo = require('@carbon-io/atom').oo(module)
 
-  var db = connect("mongodb://localhost:27017");
-  var c = db.getCollection("leafnode.update-test");
+var util = require('./util')
 
-  // test
-  try {
-    testUpdate(c);
-  } catch (e) {
-    throw e;
-  } finally {
-    // cleanup
-    c.drop();
-    db.close();
-  }
-}
+var updateTests = o({
+  _type: util.LeafnodeTestSuite,
+  name: 'UpdateTests',
+  description: 'update tests',
+  colName: 'leafnode.update-test',
+  tests: [
+    o({
+      _type: util.LeafnodeTest,
+      name: 'UpdateTest',
+      description: 'update test',
+      doTest: function() {
+        var obj1 = { "a" : 1, "b" : 2 };
+        var obj2 = { "a" : 2, "b" : 3 };
+        var obj3 = { "a" : 3, "b" : 3 };
 
-/****************************************************************************************************
- * testUpdate
- */
-function testUpdate(c) {
-  var obj1 = { "a" : 1, "b" : 2 };
-  var obj2 = { "a" : 2, "b" : 3 };
-  var obj3 = { "a" : 3, "b" : 3 };
+        this.c.insert([obj1, obj2, obj3]);
 
-  c.insert([obj1, obj2, obj3]);
+        this.c.update({ _id : obj1._id }, { "$set" : { "a" : 0 }});
 
-  c.update({ _id : obj1._id }, { "$set" : { "a" : 0 }});
+        var lookup = this.c.find({ "a" : 0 }).toArray();
+        assert.equal(lookup.length, 1);    
+      }
+    })
+  ]
+})
 
-  var lookup = c.find({ "a" : 0 }).toArray();
-  assert.equal(lookup.length, 1);    
-};
-
-/****************************************************************************************************
- * main
- */
-if (require.main == module) {
-  run();
-}
-
-/****************************************************************************************************
- * exports
- */
-exports.run = run;
+module.exports = updateTests

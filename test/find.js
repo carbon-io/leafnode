@@ -21,7 +21,6 @@ var o = require('@carbon-io/atom').o(module).main
 var oo = require('@carbon-io/atom').oo(module)
 var _o = require('@carbon-io/bond')._o(module)
 
-var connect = require('../lib/leafnode').connect;
 var util = require('./util')
 
 var numDocs = 100

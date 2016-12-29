@@ -28,6 +28,19 @@ var LeafnodeTestSuite = oo({
       // ignore
     }
     this.db.close()
+  },
+  makeObj: function(i) {
+    return { 
+      i : i,
+      iField : 22,
+      ddField : 22.2,
+      bField : true,
+      b2Field : false,
+      nField : null,
+      dField : new Date(123000000),
+      aField : [1, null, true, [1, 2, 3], { a: 1, b: null, c: [] }],
+      oField : { a: 1, b: false, c: [{}, 0], d: { ee : 1, ff : 2 }}
+    }
   }
 })
 
