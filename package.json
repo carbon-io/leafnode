@@ -25,12 +25,13 @@
     "lib" : "./lib"
   },
   "engines": { "node": ">= 4.0.0" },
+  "devDependencies" : {
+    "@carbon-io/test-tube": "0.2.x"
+  },
   "dependencies" : {
     "@carbon-io/fibers": "carbon-io/fibers.git#v0.3.8",
     "mongodb" : "2.2.x",
     "mongodb-uri": "0.9.x"
-  },
-  "devDependencies" : {
   },
   "scripts": {
     "test": "node test/all.js"
