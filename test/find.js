@@ -19,7 +19,6 @@ var assert = require('assert');
 
 var o = require('@carbon-io/atom').o(module).main
 var oo = require('@carbon-io/atom').oo(module)
-var _o = require('@carbon-io/bond')._o(module)
 
 var util = require('./util')
 
@@ -30,19 +29,6 @@ var findTests = o({
   name: 'FindTests',
   description: 'find tests',
   colName: 'leafnode.find-test',
-  makeObj: function(i) {
-    return { 
-      i : i,
-      iField : 22,
-      ddField : 22.2,
-      bField : true,
-      b2Field : false,
-      nField : null,
-      dField : new Date(123000000),
-      aField : [1, null, true, [1, 2, 3], { a: 1, b: null, c: [] }],
-      oField : { a: 1, b: false, c: [{}, 0], d: { ee : 1, ff : 2 }}
-    }
-  },
   tests: [
     o({
       _type: util.LeafnodeTest,
