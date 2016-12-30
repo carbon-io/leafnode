@@ -1,5 +1,6 @@
 var _ = require('lodash')
 
+var _o = require('@carbon-io/bond')._o(module)
 var oo = require('@carbon-io/atom').oo(module)
 var testtube = require('@carbon-io/test-tube')
 
@@ -8,7 +9,7 @@ var connect = require('../lib/leafnode').connect
 var LeafnodeTestSuite = oo({
   _type: testtube.Test,
   _C: function() {
-    this.dbUri = 'mongodb://localhost:27017'
+    this.dbUri = _o('env:LEAFNODE_MONGODB_URI') || 'mongodb://localhost:27017'
 
     this.colName = undefined
     this.db = undefined
