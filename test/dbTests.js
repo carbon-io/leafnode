@@ -22,6 +22,8 @@ var _ = require('lodash')
 var o = require('@carbon-io/atom').o(module).main
 var oo = require('@carbon-io/atom').oo(module)
 
+var Collection = require('../lib/collection')
+
 var util = require('./util')
 
 var dbTests = o({
@@ -59,6 +61,36 @@ var dbTests = o({
             col = undefined
           }
         }
+      }
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'getCollectionsTest',
+      description: 'getCollections test',
+      collections: [
+        'leafnode.foo',
+        'leafnode.bar',
+        'leafnode.baz'
+      ],
+      setup: function() {
+        var self = this
+        util.LeafnodeTest.prototype.setup.call(this)
+        this.collections.forEach(function(collectionName) {
+          self.db.createCollection(collectionName)
+        })
+      },
+      teardown: function() {
+        var self = this
+        this.collections.forEach(function(collectionName) {
+          var collection = self.db.getCollection(collectionName)
+          collection.drop()
+        })
+        util.LeafnodeTest.prototype.teardown.call(this)
+      },
+      doTest: function() {
+        this.db.getCollections().forEach(function(collection) {
+          assert(collection instanceof Collection)
+        })
       }
     })
   ]
