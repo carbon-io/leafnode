@@ -16,15 +16,16 @@ var LeafnodeTestSuite = oo({
     this.c = undefined
   },
   setup: function() {
-    if (_.isUndefined(this.colName)) {
-      throw new Error('"colName" undefined')
-    }
     this.db = connect(this.dbUri)
-    this.c = this.db.getCollection(this.colName)
+    if (!_.isUndefined(this.colName)) {
+      this.c = this.db.getCollection(this.colName)
+    }
   },
   teardown: function() {
     try {
-      this.c.drop()
+      if (!_.isUndefined(this.c)) {
+        this.c.drop()
+      }
     } catch (e) {
       // ignore
     }
@@ -51,7 +52,9 @@ var LeafnodeTest = oo({
     this.db = this.parent.db
     this.c = this.parent.c
     try {
-      this.c.drop()
+      if (!_.isUndefined(this.c)) {
+        this.c.drop()
+      }
     } catch (e) {
       // ignore
     }

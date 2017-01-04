@@ -26,7 +26,8 @@ module.exports = o({
     _o('./find'),
     _o('./insert'),
     _o('./update'),
-    _o('./distinct')
+    _o('./distinct'),
+    _o('./dbTests')
   ]
 })
 
