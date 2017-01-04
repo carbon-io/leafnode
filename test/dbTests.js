@@ -92,6 +92,52 @@ var dbTests = o({
           assert(collection instanceof Collection)
         })
       }
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'getCollectionNamesTest',
+      description: 'getCollectionNames test',
+      collections: [
+        'leafnode.bar',
+        'leafnode.baz',
+        'leafnode.foo'
+      ],
+      setup: function() {
+        var self = this
+        util.LeafnodeTest.prototype.setup.call(this)
+        this.collections.forEach(function(collectionName) {
+          self.db.createCollection(collectionName)
+        })
+      },
+      teardown: function() {
+        var self = this
+        this.collections.forEach(function(collectionName) {
+          try {
+            var collection = self.db.getCollection(collectionName)
+            collection.drop()
+          } catch (e) {
+            // ignore
+          }
+        })
+        util.LeafnodeTest.prototype.teardown.call(this)
+      },
+      doTest: function() {
+        var collectionNames = this.db.getCollectionNames()
+        var collection = undefined
+        collectionNames.sort()
+        assert.equal(collectionNames.length, this.collections.length)
+        for (var i = 0; i < collectionNames.length; i++ ) {
+          assert.equal(collectionNames[i], this.collections[i])
+        }
+        collection = this.db.getCollection(this.collections[this.collections.length - 1])
+        collection.drop()
+        collectionNames = this.db.getCollectionNames()
+        collectionNames.sort()
+        assert.equal(collectionNames.length, this.collections.length - 1)
+        for (var i = 0; i < collectionNames.length - 1; i++ ) {
+          assert.equal(collectionNames[i], this.collections[i])
+        }
+      }
     })
   ]
 })
