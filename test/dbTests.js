@@ -124,6 +124,7 @@ var dbTests = o({
       doTest: function() {
         var collectionNames = this.db.getCollectionNames()
         var collection = undefined
+        collectionNames.splice(collectionNames.indexOf('system.indexes'), 1)
         collectionNames.sort()
         assert.equal(collectionNames.length, this.collections.length)
         for (var i = 0; i < collectionNames.length; i++ ) {
@@ -132,6 +133,7 @@ var dbTests = o({
         collection = this.db.getCollection(this.collections[this.collections.length - 1])
         collection.drop()
         collectionNames = this.db.getCollectionNames()
+        collectionNames.splice(collectionNames.indexOf('system.indexes'), 1)
         collectionNames.sort()
         assert.equal(collectionNames.length, this.collections.length - 1)
         for (var i = 0; i < collectionNames.length - 1; i++ ) {
