@@ -20,7 +20,6 @@ var assert = require('assert');
 var _ = require('lodash')
 
 var o = require('@carbon-io/atom').o(module).main
-var oo = require('@carbon-io/atom').oo(module)
 
 var Collection = require('../lib/collection')
 
@@ -105,6 +104,7 @@ var dbTests = o({
       setup: function() {
         var self = this
         util.LeafnodeTest.prototype.setup.call(this)
+
         this.collections.forEach(function(collectionName) {
           self.db.createCollection(collectionName)
         })
@@ -137,6 +137,29 @@ var dbTests = o({
         for (var i = 0; i < collectionNames.length - 1; i++ ) {
           assert.equal(collectionNames[i], this.collections[i])
         }
+      }
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'statsTest',
+      description: 'stats test',
+      doTest: function() {
+        var props = [ 
+          'db',
+          'collections',
+          'objects',
+          'avgObjSize',
+          'dataSize',
+          'storageSize',
+          'numExtents',
+          'indexes',
+          'indexSize',
+          'ok'
+        ]
+        var stats = this.db.stats()
+        props.forEach(function(prop) {
+          assert(prop in stats)
+        })
       }
     })
   ]

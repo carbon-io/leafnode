@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-var assert = require('assert');
+var assert = require('assert')
 
 var o = require('@carbon-io/atom').o(module).main
 var oo = require('@carbon-io/atom').oo(module)

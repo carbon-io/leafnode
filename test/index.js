@@ -23,11 +23,14 @@ module.exports = o({
   _type: testtube.Test,
   name: 'LeafnodeTests',
   tests: [
+    _o('./leafnodeTests')
+    /*
     _o('./find'),
     _o('./insert'),
     _o('./update'),
     _o('./distinct'),
     _o('./dbTests')
+    */
   ]
 })
 
