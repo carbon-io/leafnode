@@ -24,11 +24,12 @@ module.exports = o({
   name: 'LeafnodeTests',
   tests: [
     _o('./leafnodeTests'),
+    _o('./dbTests'),
+    _o('./collectionTests'),
     _o('./find'),
     _o('./insert'),
     _o('./update'),
-    _o('./distinct'),
-    _o('./dbTests')
+    _o('./distinct')
   ]
 })
 

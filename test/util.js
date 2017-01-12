@@ -22,13 +22,14 @@ var LeafnodeTestSuite = oo({
   _C: function() {
     this.dbUri = DB_URI
 
+    this.conOptions = undefined
     this.colName = undefined
     this.con = undefined
     this.db = undefined
     this.c = undefined
   },
   setup: function() {
-    this.con = connect(this.dbUri)
+    this.con = connect(this.dbUri, this.conOptions)
     this.db = this.con.db(DB_NAME)
     if (!_.isUndefined(this.colName)) {
       this.c = this.db.getCollection(this.colName)

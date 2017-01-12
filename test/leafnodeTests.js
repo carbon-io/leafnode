@@ -149,7 +149,7 @@ var dbTests = o({
         var col = undefined
         try {
           con = leafnode.connect(
-            this.parent.standAloneURI, {database: {pkFactory: this.pkFactory}}, true)
+            this.parent.standAloneURI, {db: {pkFactory: this.pkFactory}}, true)
           assert.equal(con.databaseName, util.DB_NAME)
           assert(con._nativeDB.serverConfig instanceof leafnode.mongodb.Server)
           col = con.createCollection('foo')

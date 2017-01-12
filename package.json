@@ -28,7 +28,7 @@
   "devDependencies" : {
     "@carbon-io/atom": "0.3.x",
     "@carbon-io/bond": "0.2.x",
-    "@carbon-io/test-tube": "carbon-io/test-tube.git#12ce7a5",
+    "@carbon-io/test-tube": "carbon-io/test-tube.git#e191393",
     "sinon": "1.17.x",
     "mockery": "2.0.x"
   },
