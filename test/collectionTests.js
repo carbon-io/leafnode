@@ -306,6 +306,87 @@ var collectionTests = o({
           }
         })
       ]
+    }),
+
+
+
+    o({
+      _type: util.LeafnodeTest,
+      name: 'removeObjectTests',
+      description: 'removeObject tests',
+      tests: [
+        o({
+          _type: util.LeafnodeTest,
+          name: 'removeObjectSimpleTest',
+          description: 'simple removeObject test',
+          doTest: function() {
+            var doc = this.c.saveObject({foo: 'foo'})
+            assert('_id' in doc)
+            var numDeleted = this.c.removeObject(doc)
+            assert.equal(numDeleted, 1)
+            doc = this.c.saveObject({foo: 'foo'})
+            doc._id += 1
+            numDeleted = this.c.removeObject(doc)
+            assert.equal(numDeleted, 0)
+          }
+        }),
+        o({
+          _type: util.LeafnodeTest,
+          name: 'removeObjectNoIdTest',
+          description: 'verify removeObject throws when no id present test',
+          doTest: function() {
+            var self = this
+            assert.throws(function() {
+              self.c.removeObject({foo: 'bar'})
+            }, /_id is required/)
+          }
+        })
+      ]
+    }),
+    o({
+      _type: util.LeafnodeTest,
+      name: 'removeObjectsTests',
+      description: 'removeObjects tests',
+      tests: [
+        o({
+          _type: util.LeafnodeTest,
+          name: 'removeObjectsSimpleTest',
+          description: 'simple removeObject test',
+          doTest: function() {
+            var docCount = this.c.count()
+            var docs = this.c.insertObjects([
+              {foo: 'foo'},
+              {bar: 'bar'},
+              {baz: 'baz'}
+            ])
+            assert.equal(this.c.count(), docCount + docs.length)
+            docsToDelete = docs.slice(0, 2)
+            var numDeleted = this.c.removeObjects(docsToDelete)
+            assert.equal(numDeleted, 2)
+            assert.equal(this.c.count(), docCount + docs.length - 2)
+            assert(_.isNull(this.c.findOne({_id: docsToDelete[0]._id})))
+            assert(_.isNull(this.c.findOne({_id: docsToDelete[1]._id})))
+            assert.deepEqual(this.c.findOne({_id: docs[2]._id}), docs[2])
+          }
+        }),
+        o({
+          _type: util.LeafnodeTest,
+          name: 'updateObjectsNoIdTest',
+          description: 'verify updateObject throws when no id present test',
+          doTest: function() {
+            var self = this
+            var docs = this.c.insertObjects([
+              {foo: 'foo'},
+              {bar: 'bar'},
+              {baz: 'baz'}
+            ])
+            delete docs[1]._id
+            assert.throws(function() {
+              self.c.removeObjects(docs)
+            }, /_id is required/)
+          }
+        })
+      ]
     })
   ]
 })
