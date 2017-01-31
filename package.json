@@ -27,8 +27,8 @@
   "engines": { "node": ">= 4.0.0" },
   "devDependencies" : {
     "@carbon-io/atom": "0.4.x",
-    "@carbon-io/bond": "0.2.x",
-    "@carbon-io/test-tube": "0.2.x",
+    "@carbon-io/bond": "0.3.x",
+    "@carbon-io/test-tube": "0.3.x",
     "sinon": "1.17.x",
     "mockery": "2.0.x"
   },
