@@ -1,6 +1,6 @@
 {
   "name": "@carbon-io/leafnode",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Sync driver for MongoDB",
   "keywords": [
     "leaf-node", 
@@ -28,12 +28,12 @@
   "devDependencies" : {
     "@carbon-io/atom": "0.4.x",
     "@carbon-io/bond": "0.3.x",
-    "@carbon-io/test-tube": "0.3.x",
+    "@carbon-io/test-tube": "0.4.x",
     "sinon": "1.17.x",
     "mockery": "2.0.x"
   },
   "dependencies" : {
-    "@carbon-io/fibers": "0.4.x",
+    "@carbon-io/fibers": "0.5.x",
     "lodash": "4.17.x",
     "mongodb" : "2.2.x",
     "mongodb-uri": "0.9.x"
