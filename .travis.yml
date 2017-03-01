@@ -16,3 +16,6 @@ addons:
       - mongodb-org-server
 before_script:
   - sleep 15
+before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
