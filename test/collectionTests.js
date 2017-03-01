@@ -162,14 +162,14 @@ var collectionTests = o({
             var self = this
             var doc = this.c.saveObject({foo: 'foo'})
             assert.doesNotThrow(function() {
-              self.c.updateObject(doc, {'$set': {foo: 'bar'}})
+              self.c.updateObject(doc._id, {'$set': {foo: 'bar'}})
             }, errors.LeafnodeDocsAffectedError)
             assert('_id' in doc)
             doc = this.c.findOne({_id: doc._id})
             assert.equal(doc.foo, 'bar')
             doc._id += 1
             assert.throws(function() {
-              self.c.updateObject(doc, {'$set': {foo: 'bar'}})
+              self.c.updateObject(doc._id, {'$set': {foo: 'bar'}})
             }, function(err) {
               assert(err instanceof errors.LeafnodeObjectSetOperationError)
               assert.equal(err.modifiedCount, 0)
@@ -185,8 +185,8 @@ var collectionTests = o({
           doTest: function() {
             var self = this
             assert.throws(function() {
-              self.c.updateObject({foo: 'bar'}, {'$set': {foo: 'baz'}})
-            }, /_id is required/)
+              self.c.updateObject(undefined, {'$set': {foo: 'baz'}})
+            }, /_id required/)
           }
         })
       ]
@@ -209,7 +209,7 @@ var collectionTests = o({
             ])
             assert(_.every(docs, function(doc) { return '_id' in doc }))
             assert.doesNotThrow(function() {
-              self.c.updateObjects(docs, {'$set': {updated: true}})
+              self.c.updateObjects(_.map(docs, '_id'), {'$set': {updated: true}})
             }, errors.LeafnodeObjectSetOperationError)
             var updatedDocs = this.c.find({_id: {'$in': _.map(docs, '_id')}}).toArray()
             assert.equal(updatedDocs.length, docs.length)
@@ -232,10 +232,11 @@ var collectionTests = o({
               {bar: 'bar'},
               {baz: 'baz'}
             ])
-            delete docs[1]._id
+            docs = _.map(docs, '_id')
+            docs[1] = undefined
             assert.throws(function() {
               self.c.updateObjects(docs, {'$set': {updated: true}})
-            }, /_id is required/)
+            }, /_ids required/)
           }
         })
       ]
@@ -254,12 +255,12 @@ var collectionTests = o({
             var doc = this.c.saveObject({foo: 'foo'})
             assert('_id' in doc)
             assert.doesNotThrow(function() {
-              self.c.deleteObject(doc)
+              self.c.deleteObject(doc._id)
             }, errors.LeafnodeObjectSetOperationError)
             doc = this.c.saveObject({foo: 'foo'})
             doc._id += 1
             assert.throws(function() {
-              self.c.deleteObject(doc)
+              self.c.deleteObject(doc._id)
             }, function(err) {
               assert(err instanceof errors.LeafnodeObjectSetOperationError)
               assert.equal(err.modifiedCount, 0)
@@ -275,8 +276,8 @@ var collectionTests = o({
           doTest: function() {
             var self = this
             assert.throws(function() {
-              self.c.deleteObject({foo: 'bar'})
-            }, /_id is required/)
+              self.c.deleteObject(undefined)
+            }, /_id required/)
           }
         })
       ]
@@ -301,7 +302,7 @@ var collectionTests = o({
             assert.equal(this.c.count(), docCount + docs.length)
             docsToDelete = docs.slice(0, 2)
             assert.doesNotThrow(function() {
-              self.c.deleteObjects(docsToDelete)
+              self.c.deleteObjects(_.map(docsToDelete, '_id'))
             }, errors.LeafnodeObjectSetOperationError)
             assert.equal(this.c.count(), docCount + docs.length - 2)
             assert(_.isNull(this.c.findOne({_id: docsToDelete[0]._id})))
@@ -311,8 +312,8 @@ var collectionTests = o({
         }),
         o({
           _type: util.LeafnodeTest,
-          name: 'updateObjectsNoIdTest',
-          description: 'verify updateObject throws when no id present test',
+          name: 'deleteObjectsNoIdTest',
+          description: 'verify deleteObject throws when no id present test',
           doTest: function() {
             var self = this
             var docs = this.c.insertObjects([
@@ -320,10 +321,11 @@ var collectionTests = o({
               {bar: 'bar'},
               {baz: 'baz'}
             ])
-            delete docs[1]._id
+            var _ids = _.map(docs, '_id')
+            _ids[1] = undefined
             assert.throws(function() {
-              self.c.deleteObjects(docs)
-            }, /_id is required/)
+              self.c.deleteObjects(_ids)
+            }, /_ids required/)
           }
         })
       ]
@@ -342,12 +344,12 @@ var collectionTests = o({
             var doc = this.c.saveObject({foo: 'foo'})
             assert('_id' in doc)
             assert.doesNotThrow(function() {
-              self.c.removeObject(doc)
+              self.c.removeObject(doc._id)
             }, errors.LeafnodeObjectSetOperationError)
             doc = this.c.saveObject({foo: 'foo'})
             doc._id += 1
             assert.throws(function() {
-              self.c.removeObject(doc)
+              self.c.removeObject(doc._id)
             }, function(err) {
               assert(err instanceof errors.LeafnodeObjectSetOperationError)
               assert.equal(err.modifiedCount, 0)
@@ -362,8 +364,8 @@ var collectionTests = o({
           doTest: function() {
             var self = this
             assert.throws(function() {
-              self.c.removeObject({foo: 'bar'})
-            }, /_id is required/)
+              self.c.removeObject(undefined)
+            }, /_id required/)
           }
         })
       ]
@@ -388,7 +390,7 @@ var collectionTests = o({
             assert.equal(this.c.count(), docCount + docs.length)
             docsToDelete = docs.slice(0, 2)
             assert.doesNotThrow(function() {
-              self.c.removeObjects(docsToDelete)
+              self.c.removeObjects(_.map(docsToDelete, '_id'))
             }, errors.LeafnodeObjectSetOperationError)
             assert.equal(this.c.count(), docCount + docs.length - 2)
             assert(_.isNull(this.c.findOne({_id: docsToDelete[0]._id})))
@@ -398,8 +400,8 @@ var collectionTests = o({
         }),
         o({
           _type: util.LeafnodeTest,
-          name: 'updateObjectsNoIdTest',
-          description: 'verify updateObject throws when no id present test',
+          name: 'removeObjectsNoIdTest',
+          description: 'verify removeObject throws when no id present test',
           doTest: function() {
             var self = this
             var docs = this.c.insertObjects([
@@ -407,10 +409,11 @@ var collectionTests = o({
               {bar: 'bar'},
               {baz: 'baz'}
             ])
-            delete docs[1]._id
+            var _ids = _.map(docs, '_id')
+            _ids[1] = undefined
             assert.throws(function() {
-              self.c.removeObjects(docs)
-            }, /_id is required/)
+              self.c.removeObjects(_ids)
+            }, /_ids required/)
           }
         })
       ]
