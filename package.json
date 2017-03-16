@@ -1,6 +1,6 @@
 {
   "name": "@carbon-io/leafnode",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Sync driver for MongoDB",
   "keywords": [
     "leaf-node", 
