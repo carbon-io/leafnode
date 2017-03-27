@@ -20,4 +20,5 @@ git:
     submodules: false
 before_install:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule update --init --recursive
+  - git submodule sync
+  - until git submodule update --init --recursive; do find . -iregex '.*\.gitmodules$' -exec sed -i 's/git@github.com:/https:\/\/github.com\//' "{}" \; ; git submodule foreach --recursive 'git submodule sync'; done
