@@ -1,12 +1,12 @@
 {
   "name": "@carbon-io/leafnode",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "Sync driver for MongoDB",
   "keywords": [
-    "leaf-node", 
-    "leafnode", 
-    "mongodb", 
-    "node", 
+    "leaf-node",
+    "leafnode",
+    "mongodb",
+    "node",
     "driver",
     "Carbon.io"
   ],
@@ -16,9 +16,9 @@
     "Jackson Callaway <jackson@objectlabs.com>",
     "Greg Banks <greg@objectlabs.com>"
   ],
-  "repository" : { 
+  "repository" : {
     "type" :  "git",
-    "url" :   "http://github.com/carbon-io/leafnode.git" 
+    "url" :   "http://github.com/carbon-io/leafnode.git"
   },
   "main": "./lib/leafnode.js",
   "directories" : {
@@ -26,14 +26,14 @@
   },
   "engines": { "node": ">= 4.0.0" },
   "devDependencies" : {
-    "@carbon-io/atom": "0.5.x",
-    "@carbon-io/bond": "0.4.x",
-    "@carbon-io/test-tube": "0.4.x",
+    "@carbon-io/atom": "0.6.x",
+    "@carbon-io/bond": "0.5.x",
+    "@carbon-io/test-tube": "0.5.x",
     "sinon": "1.17.x",
     "mockery": "2.0.x"
   },
   "dependencies" : {
-    "@carbon-io/fibers": "0.5.x",
+    "@carbon-io/fibers": "0.6.x",
     "lodash": "4.17.x",
     "mongodb" : "2.2.x",
     "mongodb-uri": "0.9.x"
