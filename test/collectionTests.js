@@ -6,7 +6,7 @@ var mongodbURI = require('mongodb-uri')
 var sinon = require('sinon')
 
 var __ = require('@carbon-io/fibers').__(module)
-var o = require('@carbon-io/atom').o(module).main
+var o = require('@carbon-io/atom').o(module)
 var testtube = require('@carbon-io/test-tube')
 
 var Collection = require('../lib/collection')
@@ -24,7 +24,7 @@ var pkFactory = {
 }
 
 __(function() {
-  module.exports = o({
+  module.exports = o.main({
     _type: util.LeafnodeTestSuite,
     name: 'collectionTests',
     description: 'collection tests',

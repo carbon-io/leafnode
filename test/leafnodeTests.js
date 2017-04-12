@@ -5,7 +5,7 @@ var _ = require('lodash')
 var mongodbURI = require('mongodb-uri')
 
 var __ = require('@carbon-io/fibers').__(module)
-var o = require('@carbon-io/atom').o(module).main
+var o = require('@carbon-io/atom').o(module)
 var testtube = require('@carbon-io/test-tube')
 
 var Collection = require('../lib/collection')
@@ -15,7 +15,7 @@ var util = require('./util')
 
 
 __(function() {
-  module.exports = o({
+  module.exports = o.main({
     _type: testtube.Test,
     name: 'leafnodeTests',
     description: 'leafnode tests',

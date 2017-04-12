@@ -3,14 +3,14 @@ var assert = require('assert');
 var _ = require('lodash')
 
 var __ = require('@carbon-io/fibers').__(module)
-var o = require('@carbon-io/atom').o(module).main
+var o = require('@carbon-io/atom').o(module)
 
 var Collection = require('../lib/collection')
 
 var util = require('./util')
 
 __(function() {
-  module.exports = o({
+  module.exports = o.main({
     _type: util.LeafnodeTestSuite,
     name: 'dbTests',
     description: 'db tests',

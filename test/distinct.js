@@ -2,13 +2,13 @@ var assert = require('assert');
 
 var __ = require('@carbon-io/fibers').__(module)
 var _o = require('@carbon-io/bond')._o(module)
-var o = require('@carbon-io/atom').o(module).main
+var o = require('@carbon-io/atom').o(module)
 var oo = require('@carbon-io/atom').oo(module)
 
 var util = require('./util')
 
 __(function() {
-  module.exports = o({
+  module.exports = o.main({
     _type: util.LeafnodeTestSuite,
     name: 'DistinctTests',
     description: 'distinct tests',
