@@ -8,13 +8,9 @@ __(function() {
     _type: testtube.Test,
     name: 'LeafnodeTests',
     tests: [
-      _o('./leafnodeTests'),
-      _o('./dbTests'),
-      _o('./collectionTests'),
-      _o('./find'),
-      _o('./insert'),
-      _o('./update'),
-      _o('./distinct')
+      _o('./leafnode-tests'),
+      _o('./DbTests'),
+      _o('./CollectionTests')
     ]
   })
 })

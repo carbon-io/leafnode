@@ -417,6 +417,176 @@ __(function() {
             }
           })
         ]
+      }),
+
+      // -- legacy tests
+      
+      module.exports = o({
+        _type: util.LeafnodeTestSuite,
+        name: 'DistinctTests',
+        description: 'distinct tests',
+        colName: 'leafnode.distinct-test',
+        tests: [
+          o({
+            _type: util.LeafnodeTest,
+            name: 'DistinctTest',
+            description: 'distinct test',
+            doTest: function() {
+              var obj1 = { "a" : 1, "b" : 2 };
+              var obj2 = { "a" : 2, "b" : 3 };
+              var obj3 = { "a" : 3, "b" : 3 };
+              
+              this.c.insert(obj1);
+              this.c.insert(obj2);
+              this.c.insert(obj3);
+
+              var distincts = this.c.distinct("a");
+              assert.equal(distincts.length, 3);
+              distincts = this.c.distinct("a", { b : 3 });
+              assert.equal(distincts.length, 2);
+            }
+          })
+        ]
+      }),
+      o({
+        _type: util.LeafnodeTestSuite,
+        name: 'FindTests',
+        description: 'find tests',
+        colName: 'leafnode.find-test',
+        setup: function() {
+          util.LeafnodeTestSuite.prototype.setup.call(this)
+          this.numDocs = 100
+        },
+        tests: [
+          o({
+            _type: util.LeafnodeTest,
+            name: 'cursorTest',
+            description: 'cursor test',
+            doTest: function() {
+              var obj = undefined
+
+              for (var i = 0; i < this.parent.numDocs; i++) {
+                obj = this.parent.makeObj(i)
+                this.c.insert(obj)
+              }
+
+              var j = 0
+              var cursor = this.c.find({})
+              while (obj = cursor.next()) {
+                j++
+              }
+              assert.equal(j, this.parent.numDocs)
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'arrayTest',
+            description: 'array test',
+            doTest: function() {
+              var obj = undefined
+              for (var i = 0; i < this.parent.numDocs; i++) {
+                obj = this.parent.makeObj(i)
+                this.c.insert(obj)
+              }
+              
+              var all = this.c.find().toArray()
+              assert.equal(all.length, this.parent.numDocs)
+              
+              var o = this.parent.makeObj(0)
+              for (var i in all) {
+                var a = all[i]
+                assert.equal(o.iField, a.iField)
+                assert.equal(o.ddField, a.ddField)
+                assert.equal(o.bField, a.bField)
+                assert.equal(o.b2Field, a.b2Field)
+                assert.equal(o.dField.getTime(), a.dField.getTime())
+                assert.equal(o.nField, a.nField)
+                assert.deepEqual(o.aField, a.aField)
+                assert.deepEqual(o.oField, a.oField)
+              }
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'findOneTest',
+            description: 'findOne test',
+            doTest: function() {
+              var obj = {_id: 0}
+              this.c.insert(obj)
+              var result = this.c.findOne({_id: 0})
+              assert.deepEqual(obj, result)
+            }
+          })
+        ]
+      }),
+      o({
+        _type: util.LeafnodeTestSuite,
+        name: 'InsertTests',
+        description: 'insert tests',
+        colName: 'leafnode.insert-test',
+        tests: [
+          o({
+            _type: util.LeafnodeTest,
+            name: 'InsertTest',
+            description: 'insert test',
+            doTest: function() {
+              var obj = undefined
+              for (var i = 0; i < 100; i++) {
+                obj = this.parent.makeObj(i);
+                this.c.insert(obj);
+              }
+              
+              var all = this.c.find().toArray();
+              var o = this.parent.makeObj(0);
+              for (var i in all) { // TODO: just de?
+                var a = all[i];
+                assert.equal(o.iField, a.iField);
+                assert.equal(o.ddField, a.ddField);
+                assert.equal(o.bField, a.bField);
+                assert.equal(o.b2Field, a.b2Field);
+                assert.equal(o.dField.getTime(), a.dField.getTime());
+                assert.equal(o.nField, a.nField);
+                assert.deepEqual(o.aField, a.aField);
+                assert.deepEqual(o.oField, a.oField);
+              }
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'BulkInsertTest',
+            description: 'bulk insert test',
+            doTest: function() {
+              var o = {};
+              this.c.insert([o]);
+              assert.ok(o._id);
+            }
+          })
+        ]
+      }),
+      o({
+        _type: util.LeafnodeTestSuite,
+        name: 'UpdateTests',
+        description: 'update tests',
+        colName: 'leafnode.update-test',
+        tests: [
+          o({
+            _type: util.LeafnodeTest,
+            name: 'UpdateTest',
+            description: 'update test',
+            doTest: function() {
+              var obj1 = { "a" : 1, "b" : 2 };
+              var obj2 = { "a" : 2, "b" : 3 };
+              var obj3 = { "a" : 3, "b" : 3 };
+
+              this.c.insert([obj1, obj2, obj3]);
+
+              this.c.update({ _id : obj1._id }, { "$set" : { "a" : 0 }});
+
+              var lookup = this.c.find({ "a" : 0 }).toArray();
+              assert.equal(lookup.length, 1);    
+            }
+          })
+        ]
       })
     ]
   })
