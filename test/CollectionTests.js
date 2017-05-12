@@ -2,6 +2,7 @@ var assert = require('assert')
 var sinon = require('sinon')
 
 var _ = require('lodash')
+var async = require('async')
 var mongodbURI = require('mongodb-uri')
 var sinon = require('sinon')
 
@@ -95,13 +96,17 @@ __(function() {
             setup: function() {
               util.LeafnodeTest.prototype.setup.apply(this, arguments)
               this.sandbox = sinon.sandbox.create()
-              this.sandbox.stub(this.c, 'insertMany', function(docs) {
+              this.sandbox.stub(this.c, 'insertMany', function(docs, options, cb) {
                 docs = _.cloneDeep(docs)
                 docs.splice(docs.length - 1, 1)
-                return {
+                var ret = {
                   insertedCount: 2,
                   ops: docs
                 }
+                if (cb) {
+                  return cb(undefined, ret)
+                }
+                return ret
               })
             },
             teardown: function() {
