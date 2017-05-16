@@ -10,7 +10,8 @@ __(function() {
     tests: [
       _o('./leafnode-tests'),
       _o('./DbTests'),
-      _o('./CollectionTests')
+      _o('./CollectionTests'),
+      _o('./CursorTests')
     ]
   })
 })
