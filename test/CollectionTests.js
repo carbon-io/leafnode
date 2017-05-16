@@ -670,7 +670,6 @@ __(function() {
                   docsToDelete = docs.slice(0, 2)
                   async.series([
                     function(done) {
-                      debugger
                       self.c.count({}, function(err, count) {
                         if (err) {
                           return done(err)
@@ -684,13 +683,11 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.deleteObjects(_.map(docsToDelete, '_id'), {}, function(err, result) {
                         return done(err)
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.count({}, function(err, count) {
                         if (err) {
                           return done(err)
@@ -704,7 +701,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docsToDelete[0]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -718,7 +714,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docsToDelete[1]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -732,7 +727,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docs[2]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -934,7 +928,6 @@ __(function() {
                   docsToDelete = docs.slice(0, 2)
                   async.series([
                     function(done) {
-                      debugger
                       self.c.count({}, function(err, count) {
                         if (err) {
                           return done(err)
@@ -948,13 +941,11 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.removeObjects(_.map(docsToDelete, '_id'), {}, function(err, result) {
                         return done(err)
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.count({}, function(err, count) {
                         if (err) {
                           return done(err)
@@ -968,7 +959,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docsToDelete[0]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -982,7 +972,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docsToDelete[1]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -996,7 +985,6 @@ __(function() {
                       })
                     },
                     function(done) {
-                      debugger
                       self.c.findOne({_id: docs[2]._id}, {}, function(err, result) {
                         if (err) {
                           return done(err)
@@ -1064,7 +1052,229 @@ __(function() {
 
       // -- legacy tests
       
-      module.exports = o({
+      o({
+        _type: util.LeafnodeTestSuite,
+        name: 'IndexTests',
+        description: 'Index tests',
+        colName: 'leafnode.index-test',
+        populate: function() {
+          try {
+            this.c.drop()
+          } catch (e) {
+            // pass
+          }
+          var objs = [
+            { "a" : 1, "b" : 2 },
+            { "a" : 2, "b" : 3 },
+            { "a" : 3, "b" : 3 }
+          ]
+          this.c.insert(objs)
+        },
+        tests: [
+          o({
+            _type: util.LeafnodeTest,
+            name: 'CreateIndexTest',
+            description: 'createIndex test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function() {
+              var indexes = this.c.getIndexes()
+              assert.equal(_.filter(indexes, function(val) { 
+                return val.name === 'a_1_b_1' 
+              }).length, 0)
+              var indexName = this.c.createIndex({a: 1, b: 1})
+              assert.equal(indexName, 'a_1_b_1')
+              indexes = this.c.getIndexes()
+              assert.equal(_.filter(indexes, function(val) { 
+                return val.name === 'a_1_b_1' 
+              }).length, 1)
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'CreateIndexAsyncTest',
+            description: 'createIndex async test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function(err, done) {
+              var self = this
+              this.c.getIndexes(function(err, indexes) {
+                if (err) {
+                  return done(err)
+                }
+                try {
+                  assert.equal(_.filter(indexes, function(val) { 
+                    return val.name === 'a_1_b_1' 
+                  }).length, 0)
+                } catch (err) {
+                  return done(err)
+                }
+                self.c.createIndex({a: 1, b: 1}, {}, function(err, indexName) {
+                  if (err) {
+                    return done(err)
+                  }
+                  try {
+                    assert(indexName,'a_1_b_1') 
+                  } catch (err) {
+                    return done(err)
+                  }
+                  self.c.getIndexes(function(err, indexes) {
+                    if (err) {
+                      return done(err)
+                    }
+                    try {
+                      assert.equal(_.filter(indexes, function(val) { 
+                        return val.name === 'a_1_b_1' 
+                      }).length, 1)
+                    } catch (e) {
+                      err = e
+                    }
+                    return done(err)
+                  })
+                })
+              })
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'DropIndexTest',
+            description: 'dropIndex test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function() {
+              var indexName = this.c.createIndex({a: 1, b: 1})
+              assert.equal(indexName, 'a_1_b_1')
+              var result = this.c.dropIndex(indexName)
+              assert.deepEqual(result, {nIndexesWas: 2, ok: 1})
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'DropIndexAsyncTest',
+            description: 'dropIndex async test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function(ctx, done) {
+              var self = this
+              var indexName = this.c.createIndex({a: 1, b: 1}, {}, function(err, indexName) {
+                if (err) {
+                  return done(err)
+                }
+                try {
+                  assert.equal(indexName, 'a_1_b_1')
+                } catch (err) {
+                  return done(err)
+                }
+                self.c.dropIndex(indexName, {}, function(err, result) {
+                  if (err) {
+                    return done(err)
+                  }
+                  try {
+                    assert.deepEqual(result, {nIndexesWas: 2, ok: 1})
+                  } catch (e) {
+                    err = e
+                  }
+                  return done(err)
+                })
+              })
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'DropIndexsTest',
+            description: 'dropIndexes test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function() {
+              var indexName = this.c.createIndex({a: 1, b: 1})
+              assert.equal(indexName, 'a_1_b_1')
+              indexName = this.c.createIndex({b: 1, a: 1})
+              assert.equal(indexName, 'b_1_a_1')
+              var result = this.c.indexInformation({full: true})
+              assert.equal(result.length, 3)
+              result = this.c.dropIndexes()
+              assert(_.isBoolean(result) && result)
+              result = this.c.indexInformation({full: true})
+              // _id index remains
+              assert.equal(result.length, 1)
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'DropIndexsAsyncTest',
+            description: 'dropIndexes async test',
+            setup: function() {
+              util.LeafnodeTest.prototype.setup.call(this)
+              this.parent.populate()
+            },
+            doTest: function(ctx, done) {
+              var self = this
+              this.c.createIndex({a: 1, b: 1}, {}, function(err, indexName) {
+                if (err) {
+                  return done(err)
+                }
+                try {
+                  assert.equal(indexName, 'a_1_b_1')
+                } catch (err) {
+                  return done(err)
+                }
+                self.c.createIndex({b: 1, a: 1}, {}, function(err, indexName) {
+                  if (err) {
+                    return done(err)
+                  }
+                  try {
+                    assert.equal(indexName, 'b_1_a_1')
+                  } catch (err) {
+                    return done(err)
+                  }
+                  self.c.indexInformation({full: true}, function(err, result) {
+                    if (err) {
+                      return done(err)
+                    }
+                    try {
+                      assert.equal(result.length, 3)
+                    } catch (err) {
+                      return done(err)
+                    }
+                    self.c.dropIndexes(function(err, result) {
+                      if (err) {
+                        return done(err)
+                      }
+                      try {
+                        assert(_.isBoolean(result) && result)
+                      } catch (err) {
+                        return done(err)
+                      }
+                      self.c.indexInformation({full: true}, function(err, result) {
+                        if (err) {
+                          return done(err)
+                        }
+                        try {
+                          assert.equal(result.length, 1)
+                        } catch (e) {
+                          err = e
+                        }
+                        done(err)
+                      })
+                    })
+                  })
+                })
+              })
+            }
+          }),
+        ]
+      }),
+      o({
         _type: util.LeafnodeTestSuite,
         name: 'DistinctTests',
         description: 'distinct tests',
