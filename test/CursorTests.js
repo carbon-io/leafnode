@@ -191,39 +191,6 @@ __(function() {
       }),
       o({
         _type: util.LeafnodeTest,
-        name: 'SimpleSortAsyncTest',
-        description: 'Simple sort async test',
-        setup: function() {
-          util.LeafnodeTest.prototype.setup.call(this)
-          this.parent.populate()
-        },
-        doTest: function(ctx, done) {
-          var self = this
-          this.c.find({}, function(err, curs) {
-            if (err) {
-              return done(err)
-            }
-            curs.sort('i', -1, function(err, curs) {
-              if (err) {
-                return done(err)
-              }
-              curs.next(function(err, val) {
-                if (err) {
-                  return done(err)
-                }
-                try {
-                  assert.equal(val.i, 49)
-                } catch (e) {
-                  err = e
-                }
-                return done(err)
-              })
-            })
-          })
-        }
-      }),
-      o({
-        _type: util.LeafnodeTest,
         name: 'SimpleLimitTest',
         description: 'Simple limit test',
         setup: function() {
@@ -238,8 +205,20 @@ __(function() {
       }),
       o({
         _type: util.LeafnodeTest,
-        name: 'SimpleLimitAsyncTest',
-        description: 'Simple limit async test',
+        name: 'ToArrayTest',
+        description: 'Simple toArray test',
+        setup: function() {
+          util.LeafnodeTest.prototype.setup.call(this)
+          this.parent.populate()
+        },
+        doTest: function() {
+          assert.equal(this.c.find({}).count(), 50)
+        }
+      }),
+      o({
+        _type: util.LeafnodeTest,
+        name: 'ToArrayAsyncTest',
+        description: 'Simple toArray async test',
         setup: function() {
           util.LeafnodeTest.prototype.setup.call(this)
           this.parent.populate()
@@ -248,25 +227,53 @@ __(function() {
           var self = this
           this.c.find({}, function(err, curs) {
             if (err) {
-              return done(err)
+              done(err)
             }
-            curs.limit(25, function(err, curs) {
+            curs.toArray(function(err, docs) {
               if (err) {
-                return done(err)
-              }
-              curs.count(true, {}, function(err, count) {
-                if (err) {
-                  return done(err)
-                }
-                try {
-                  assert.equal(count, 25)
-                } catch (e) {
-                  err = e
-                }
                 done(err)
-              })
+              }
+              try {
+                assert.equal(docs.length, 50)
+              } catch (e) {
+                err = e
+              }
+              done(err)
             })
           })
+        }
+      }),
+      o({
+        _type: util.LeafnodeTest,
+        name: 'SetOptionTest',
+        description: 'Simple setOption test',
+        setup: function() {
+          util.LeafnodeTest.prototype.setup.call(this)
+          this.parent.populate()
+        },
+        doTest: function() {
+          var self = this
+          var curs = self.c.find({})
+          assert.doesNotThrow(function() {
+            curs.setOption('numberOfRetries', 10)
+          }, Error)
+          assert.throws(function() {
+            curs.setOption({'foobar': 10})
+          }, Error)
+        }
+      }),
+      o({
+        _type: util.LeafnodeTest,
+        name: 'SkipTest',
+        description: 'Simple skip test',
+        setup: function() {
+          util.LeafnodeTest.prototype.setup.call(this)
+          this.parent.populate()
+        },
+        doTest: function() {
+          var self = this
+          var curs = self.c.find({}).skip(25)
+          assert.equal(curs.next().i, 25)
         }
       }),
     ]
