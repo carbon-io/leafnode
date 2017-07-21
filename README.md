@@ -3,14 +3,14 @@ leafnode
 
 [![Build Status](https://travis-ci.org/carbon-io/leafnode.svg?branch=master)](https://travis-ci.org/carbon-io/leafnode)
 
-```leafnode``` is a "synchronous" MongoDB driver. It is a wrapper around [node-mongodb-native](https://github.com/mongodb/node-mongodb-native) implemented using the [node-fibers](https://github.com/laverdet/node-fibers) co-routine library. 
+```leafnode``` is a "synchronous" MongoDB driver. It is a wrapper around [node-mongodb-native](https://github.com/mongodb/node-mongodb-native) implemented using the [node-fibers](https://github.com/laverdet/node-fibers) co-routine library.
 
 ```leafnode``` is currently experimental and in alpha.
 
 Example:
 
 ```
-var connect = require('leafnode').connect;
+var connect = require('@carbon-io/leafnode').connect;
 
 try {
    var db = connect("mongodb://localhost:27017/mydb");
@@ -29,7 +29,7 @@ We say "synchronous" because ```leafnode``` code execution is still asynchronous
 Installation
 ------------
 
-Using npm 
+Using npm
 
 ```
 % cd <your-app>
@@ -55,7 +55,7 @@ To run unit tests
 Using ```leafnode``` in your code
 ----------------------------------
 
-In order to use ```leafnode``` you need to properly bootstrap your application by creating a ```Fiber``` for the code to run in. 
+In order to use ```leafnode``` you need to properly bootstrap your application by creating a ```Fiber``` for the code to run in.
 
 The basic idea is as follows:
 
@@ -68,7 +68,7 @@ Fiber(function() {
 
 ```
 
-In practice you will want to do this at the beginning of a command line program or, if using an application toolkit like [express](https://github.com/visionmedia/express), as you process each request. One nice way of achieving this in ```express``` is to add a middleware function that wraps request handling in a ```Fiber```. 
+In practice you will want to do this at the beginning of a command line program or, if using an application toolkit like [express](https://github.com/visionmedia/express), as you process each request. One nice way of achieving this in ```express``` is to add a middleware function that wraps request handling in a ```Fiber```.
 
 ```
 app.use(function(req, res, next) {
