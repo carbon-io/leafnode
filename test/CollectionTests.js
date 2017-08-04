@@ -622,7 +622,7 @@ __(function() {
                 self.c.deleteObject(doc._id)
               }, function(err) {
                 assert(err instanceof errors.LeafnodeObjectSetOperationError)
-                assert.equal(err.modifiedCount, 0)
+                assert.equal(err.deletedCount, 0)
                 assert.equal(err.objectCount, 1)
                 return true
               })
@@ -650,7 +650,7 @@ __(function() {
                       var e = undefined
                       try {
                         assert(err instanceof errors.LeafnodeObjectSetOperationError)
-                        assert.equal(err.modifiedCount, 0)
+                        assert.equal(err.deletedCount, 0)
                         assert.equal(err.objectCount, 1)
                       } catch (err) {
                         e = err
@@ -880,7 +880,7 @@ __(function() {
                 self.c.removeObject(doc._id)
               }, function(err) {
                 assert(err instanceof errors.LeafnodeObjectSetOperationError)
-                assert.equal(err.modifiedCount, 0)
+                assert.equal(err.deletedCount, 0)
                 assert.equal(err.objectCount, 1)
                 return true
               })
@@ -908,7 +908,7 @@ __(function() {
                       var e = undefined
                       try {
                         assert(err instanceof errors.LeafnodeObjectSetOperationError)
-                        assert.equal(err.modifiedCount, 0)
+                        assert.equal(err.deletedCount, 0)
                         assert.equal(err.objectCount, 1)
                       } catch (err) {
                         e = err
