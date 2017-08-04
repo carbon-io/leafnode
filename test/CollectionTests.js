@@ -36,6 +36,18 @@ __(function() {
       }
     },
     tests: [
+      o({
+        _type: util.LeafnodeTest,
+        name: 'RenameTest',
+        description: 'rename test',
+        doTest: function() {
+          this.c.insert({foo: 'foo'})
+          var newCollection = this.c.rename('leafnode-new', {dropTarget: true})
+          assert.equal(newCollection._collection.s.name, 'leafnode-new')
+          assert.equal(this.db.getCollectionNames().indexOf(this.parent.colName), -1)
+          newCollection.drop()
+        }
+      }),
 
       // -- object api tests
 
@@ -262,7 +274,7 @@ __(function() {
                 assert(upserted)
               } catch (e) {
                 throw new testtube.errors.SkipTestError(
-                  'XXX: upsert is not reported correctly by the underlying ' + 
+                  'XXX: upsert is not reported correctly by the underlying ' +
                   'driver. Revisit later.')
               }
             }
@@ -427,7 +439,7 @@ __(function() {
               var updatedDocs = this.c.find({_id: {'$in': _.map(docs, '_id')}}).toArray()
               assert.equal(updatedDocs.length, docs.length)
               for (var i = 0; i < updatedDocs.length; i++) {
-                var index = 
+                var index =
                   _.findIndex(
                     updatedDocs, function(doc) { return docs[i]._id == doc._id })
                 assert(updatedDocs[index].updated)
@@ -471,7 +483,7 @@ __(function() {
                         try {
                           assert.equal(updatedDocs.length, docs.length)
                           for (var i = 0; i < updatedDocs.length; i++) {
-                            var index = 
+                            var index =
                               _.findIndex(
                                 updatedDocs, function(doc) { return docs[i]._id == doc._id })
                             assert(updatedDocs[index].updated)
@@ -1051,7 +1063,7 @@ __(function() {
       }),
 
       // -- legacy tests
-      
+
       o({
         _type: util.LeafnodeTestSuite,
         name: 'IndexTests',
@@ -1081,14 +1093,14 @@ __(function() {
             },
             doTest: function() {
               var indexes = this.c.getIndexes()
-              assert.equal(_.filter(indexes, function(val) { 
-                return val.name === 'a_1_b_1' 
+              assert.equal(_.filter(indexes, function(val) {
+                return val.name === 'a_1_b_1'
               }).length, 0)
               var indexName = this.c.createIndex({a: 1, b: 1})
               assert.equal(indexName, 'a_1_b_1')
               indexes = this.c.getIndexes()
-              assert.equal(_.filter(indexes, function(val) { 
-                return val.name === 'a_1_b_1' 
+              assert.equal(_.filter(indexes, function(val) {
+                return val.name === 'a_1_b_1'
               }).length, 1)
             }
           }),
@@ -1107,8 +1119,8 @@ __(function() {
                   return done(err)
                 }
                 try {
-                  assert.equal(_.filter(indexes, function(val) { 
-                    return val.name === 'a_1_b_1' 
+                  assert.equal(_.filter(indexes, function(val) {
+                    return val.name === 'a_1_b_1'
                   }).length, 0)
                 } catch (err) {
                   return done(err)
@@ -1118,7 +1130,7 @@ __(function() {
                     return done(err)
                   }
                   try {
-                    assert(indexName,'a_1_b_1') 
+                    assert(indexName,'a_1_b_1')
                   } catch (err) {
                     return done(err)
                   }
@@ -1127,8 +1139,8 @@ __(function() {
                       return done(err)
                     }
                     try {
-                      assert.equal(_.filter(indexes, function(val) { 
-                        return val.name === 'a_1_b_1' 
+                      assert.equal(_.filter(indexes, function(val) {
+                        return val.name === 'a_1_b_1'
                       }).length, 1)
                     } catch (e) {
                       err = e
@@ -1288,7 +1300,7 @@ __(function() {
               var obj1 = { "a" : 1, "b" : 2 };
               var obj2 = { "a" : 2, "b" : 3 };
               var obj3 = { "a" : 3, "b" : 3 };
-              
+
               this.c.insert(obj1);
               this.c.insert(obj2);
               this.c.insert(obj3);
@@ -1341,10 +1353,10 @@ __(function() {
                 obj = this.parent.makeObj(i)
                 this.c.insert(obj)
               }
-              
+
               var all = this.c.find().toArray()
               assert.equal(all.length, this.parent.numDocs)
-              
+
               var o = this.parent.makeObj(0)
               for (var i in all) {
                 var a = all[i]
@@ -1388,7 +1400,7 @@ __(function() {
                 obj = this.parent.makeObj(i);
                 this.c.insert(obj);
               }
-              
+
               var all = this.c.find().toArray();
               var o = this.parent.makeObj(0);
               for (var i in all) { // TODO: just de?
@@ -1436,13 +1448,13 @@ __(function() {
               this.c.update({ _id : obj1._id }, { "$set" : { "a" : 0 }});
 
               var lookup = this.c.find({ "a" : 0 }).toArray();
-              assert.equal(lookup.length, 1);    
+              assert.equal(lookup.length, 1);
             }
           })
         ]
       })
 
-      // -- 
+      // --
     ]
   })
 })
