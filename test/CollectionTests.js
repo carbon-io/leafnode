@@ -331,7 +331,7 @@ __(function() {
               var doc = this.c.insertObject({foo: 'foo'})
               assert.doesNotThrow(function() {
                 self.c.updateObject(doc._id, {'$set': {foo: 'bar'}})
-              }, errors.LeafnodeDocsAffectedError)
+              }, errors.LeafnodeObjectSetOperationError)
               assert('_id' in doc)
               doc = this.c.findOne({_id: doc._id})
               assert.equal(doc.foo, 'bar')
@@ -413,7 +413,36 @@ __(function() {
                 done(e)
               })
             }
-          })
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'UpdateObjectSimpleUpsertTest',
+            description: 'Simple updateObject upsert test',
+            doTest: function() {
+              var self = this
+              var doc = {_id: 'foo', bar: 'bar'}
+              assert.doesNotThrow(function() {
+                self.c.updateObject(doc._id, doc, {upsert: true})
+              }, errors.LeafnodeObjectSetOperationError)
+              doc = this.c.findOne({_id: doc._id})
+              assert.equal(doc.bar, 'bar')
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'UpdateObjectMatchedButNotModifiedTest',
+            description: 'Simple updateObject upsert test',
+            doTest: function() {
+              var self = this
+              var doc = {_id: 'foo', bar: 'bar'}
+              this.c.insert(doc)
+              assert.doesNotThrow(function() {
+                self.c.updateObject(doc._id, {$set: {bar: 'bar'}})
+              }, errors.LeafnodeObjectSetOperationError)
+              doc = this.c.findOne({_id: doc._id})
+              assert.equal(doc.bar, 'bar')
+            }
+          }),
         ]
       }),
       o({
@@ -542,7 +571,33 @@ __(function() {
                 })
               })
             }
-          })
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'UpdateObjectsSimpleUpsertTest',
+            description: 'Simple updateObjects upsert test',
+            doTest: function() {
+              var self = this
+              assert.doesNotThrow(function() {
+                self.c.updateObjects(['foo'], {$set: {bar: 'bar'}}, {upsert: true})
+              }, errors.LeafnodeObjectSetOperationError)
+              assert.deepEqual(self.c.findOne({_id: 'foo'}), {
+                _id: 'foo',
+                bar: 'bar'
+              })
+            }
+          }),
+          o({
+            _type: util.LeafnodeTest,
+            name: 'UpdateObjectsUpsertMultipleIdsTest',
+            description: 'updateObjects upsert multiple objects test',
+            doTest: function() {
+              var self = this
+              assert.throws(function() {
+                self.c.updateObjects(['foo', 'bar'], {$set: {bar: 'bar'}}, {upsert: true})
+              }, TypeError)
+            }
+          }),
         ]
       }),
       o({
