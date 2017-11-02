@@ -25,7 +25,7 @@ __(function() {
           var col = undefined
           try {
             assert.doesNotThrow(function() {
-              col = self.db.createCollection('leafnode.createCollectionTest', {safe: true})
+              col = self.db.createCollection('leafnode.createCollectionTest', self.parent.dbIsReplSet ? {safe: true} : {})
             }, Error)
             assert(!_.isUndefined(col))
           } finally {
@@ -53,7 +53,7 @@ __(function() {
         description: 'createCollection async test',
         doTest: function(ctx, done) {
           var self = this
-          col = self.db.createCollection('leafnode.createCollectionTest', {safe: true}, function(err, col) {
+          col = self.db.createCollection('leafnode.createCollectionTest', this.parent.dbIsReplSet ? {safe: true} : {}, function(err, col) {
             if (err) {
               return done(err)
             }

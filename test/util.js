@@ -21,6 +21,7 @@ var LeafnodeTestSuite = oo({
   _type: testtube.Test,
   _C: function() {
     this.dbUri = DB_URI
+    this.dbIsReplSet = !_.isNil(REPL_SET_DB_URI)
 
     this.conOptions = undefined
     this.colName = undefined
