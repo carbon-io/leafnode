@@ -7,4 +7,7 @@ Leafnode
 This documentation is organized into the following sections:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   
+    guide/index
+    ref/index

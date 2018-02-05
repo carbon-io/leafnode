@@ -11,12 +11,20 @@ leafnode.DB
 
 DB class description
 
-Properties
-----------
+Instance Properties
+-------------------
 
 .. class:: leafnode.DB
     :noindex:
     :hidden:
+
+    .. attribute:: nativeDb
+
+       :type: xxx
+       :required:
+
+       nativeDb
+
 
 Methods
 -------
@@ -25,7 +33,7 @@ Methods
     :noindex:
     :hidden:
 
-    .. function:: leafnode.DB.authenticate(username, password, options, options.authMechanism, cb)
+    .. function:: authenticate(username, password, options, options.authMechanism, cb)
 
         :param username: The username.
         :type username: string
@@ -37,21 +45,23 @@ Methods
         :type options.authMechanism: string
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: returns true if authed, false otherwise
         :rtype: boolean
 
         Authenticate a user against the server.
 
-    .. function:: leafnode.DB.close(force, cb)
+    .. function:: close(force, cb)
 
         :param force: Force close, emitting no events
         :type force: boolean
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: no return value
         :rtype: undefined
 
         Close the db and it's underlying connections
 
-    .. function:: leafnode.DB.command(command, options, options.readPreference, options.maxTimeMS, cb)
+    .. function:: command(command, options, options.readPreference, options.maxTimeMS, cb)
 
         :param command: The command hash
         :type command: object
@@ -63,11 +73,12 @@ Methods
         :type options.maxTimeMS: number
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: returns result of the command
         :rtype: object
 
         Execute a command
 
-    .. function:: leafnode.DB.createCollection(name, options, options.w, options.wtimeout, options.j, options.raw, options.pkFactory, options.readPreference, options.serializeFunctions, options.strict, options.capped, options.size, options.max, options.autoIndexId, cb)
+    .. function:: createCollection(name, options, options.w, options.wtimeout, options.j, options.raw, options.pkFactory, options.readPreference, options.serializeFunctions, options.strict, options.capped, options.size, options.max, options.autoIndexId, cb)
 
         :param name: the collection name we wish to access.
         :type name: string
@@ -99,11 +110,12 @@ Methods
         :type options.autoIndexId: boolean
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: returns newly created collection
         :rtype: Collection
 
         Creates a collection on a server pre-allocating space, need to create f.ex capped collections.
 
-    .. function:: leafnode.DB.db(name, options, options.noListener, options.returnNonCachedInstance, cb)
+    .. function:: db(name, options, options.noListener, options.returnNonCachedInstance, cb)
 
         :param name: The name of the database we want to use.
         :type name: string
@@ -119,7 +131,7 @@ Methods
 
         Create a new Db instance sharing the current socket connections. Be aware that the new db instances are related in a parent-child relationship to the original instance so that events are correctly emitted on child db instances. Child db instances are cached so performing db('db1') twice will return the same instance. You can control these behaviors with the options noListener and returnNonCachedInstance.
 
-    .. function:: leafnode.DB.getCollection(name, options, options.w, options.wtimeout, options.j, options.raw, options.pkFactory, options.readPreference, options.serializeFunctions, options.strict, cb)
+    .. function:: getCollection(name, options, options.w, options.wtimeout, options.j, options.raw, options.pkFactory, options.readPreference, options.serializeFunctions, options.strict, cb)
 
         :param name: the collection name we wish to access.
         :type name: string
@@ -143,27 +155,30 @@ Methods
         :type options.strict: boolean
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: return the new Collection instance if not in strict mode
         :rtype: Collection
 
         Fetch a specific collection (containing the actual collection information).
 
-    .. function:: leafnode.DB.getCollectionNames(cb)
+    .. function:: getCollectionNames(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: returns an array of objects containing collection info
         :rtype: array
 
         Fetch all collection names for the current db.
 
-    .. function:: leafnode.DB.getCollections(cb)
+    .. function:: getCollections(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: returns an array of objects containing collection info
         :rtype: array
 
         Fetch all collections for the current db.
 
-    .. function:: leafnode.DB.stats(options, options.scale, cb)
+    .. function:: stats(options, options.scale, cb)
 
         :param options: Optional settings.
         :type options: object
@@ -171,6 +186,7 @@ Methods
         :type options.scale: number
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Db.html#~resultCallback
         :rtype: object
 
         Get all the db statistics.

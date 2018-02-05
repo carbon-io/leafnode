@@ -11,14 +11,22 @@ leafnode.Collection
 
 This constructor should not be called directly. Use DB.getCollection()
 
-Properties
-----------
+Instance Properties
+-------------------
 
 .. class:: leafnode.Collection
     :noindex:
     :hidden:
 
-    .. attribute:: leafnode.Collection.db
+    .. attribute:: _collection
+
+       :type: mongodb.Collection
+       :required:
+
+       xxx
+
+
+    .. attribute:: db
 
        :type: DB
        :required:
@@ -33,17 +41,18 @@ Methods
     :noindex:
     :hidden:
 
-    .. function:: leafnode.Collection.count(query, cb)
+    .. function:: count(query, cb)
 
         :param query: xxx
         :type query: Object
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
+        :returns: The number of documents in this collection
         :rtype: number
 
         count description
 
-    .. function:: leafnode.Collection.createIndex(fieldOrSpec, options, options.w, options.wtimeout, options.j, options.unique, options.sparse, options.background, options.dropDups, options.min, options.max, options.v, options.expireAfterSeconds, options.name, cb)
+    .. function:: createIndex(fieldOrSpec, options, options.w, options.wtimeout, options.j, options.unique, options.sparse, options.background, options.dropDups, options.min, options.max, options.v, options.expireAfterSeconds, options.name, cb)
 
         :param fieldOrSpec: Defines the index.
         :type fieldOrSpec: string | object
@@ -76,11 +85,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns index name
         :rtype: string
 
         Creates an index on the db and collection collection.
 
-    .. function:: leafnode.Collection.deleteMany(selector, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: deleteMany(selector, options, options.w, options.wtimeout, options.j, cb)
 
         :param selector: The Filter used to select the documents to delete
         :type selector: object
@@ -95,11 +105,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~deleteWriteOpResult
         :rtype: object
 
         Delete multiple documents.
 
-    .. function:: leafnode.Collection.deleteObject(_id, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: deleteObject(_id, options, options.w, options.wtimeout, options.j, cb)
 
         :param _id: The _id of the doc to delete.
         :type _id: xxx
@@ -117,7 +128,7 @@ Methods
 
         Delete a single document.
 
-    .. function:: leafnode.Collection.deleteObjects(_ids, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: deleteObjects(_ids, options, options.w, options.wtimeout, options.j, cb)
 
         :param _ids: The _ids of the docs to delete.
         :type _ids: xxx
@@ -135,7 +146,7 @@ Methods
 
         Delete multiple documents.
 
-    .. function:: leafnode.Collection.deleteOne(selector, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: deleteOne(selector, options, options.w, options.wtimeout, options.j, cb)
 
         :param selector: The selector used to select the document to delete
         :type selector: object
@@ -150,11 +161,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~deleteWriteOpResult
         :rtype: object
 
         Delete a single document.
 
-    .. function:: leafnode.Collection.distinct(key, query, options, options.readPreference, cb)
+    .. function:: distinct(key, query, options, options.readPreference, cb)
 
         :param key: Field of the document to find distinct values for.
         :type key: string
@@ -167,31 +179,35 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns array of distinct values
         :rtype: xxx
 
         The distinct command returns returns a list of distinct values for the given key across a collection.
 
-    .. function:: leafnode.Collection.drop(options, cb)
+    .. function:: drop(options, cb)
 
         :param options: Optional settings (not currently used)
         :type options: object
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns true if collection dropped, false otherwise
         :rtype: boolean
 
         Drop the collection from the database, removing it permanently. New accesses will create a new collection.
 
-    .. function:: leafnode.Collection.dropAllIndexesa(cb)
+    .. function:: dropAllIndexesa(cb)
 
+        :deprecated:
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns true if removed, false otherwise
         :rtype: boolean
 
         Drops all indexes from this collection.
 
-    .. function:: leafnode.Collection.dropIndex(indexName, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: dropIndex(indexName, options, options.w, options.wtimeout, options.j, cb)
 
         :param indexName: Name of the index to drop.
         :type indexName: string
@@ -206,21 +222,24 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns object containing ok:0|1 and nIndexesWas:total indexes
         :rtype: Object
 
         Drops an index from this collection.
 
-    .. function:: leafnode.Collection.dropIndexes(cb)
+    .. function:: dropIndexes(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns true if removed, false otherwise
         :rtype: boolean
 
         Drops all indexes from this collection.
 
-    .. function:: leafnode.Collection.ensureIndex(fieldOrSpec, options, options.w, options.wtimeout, options.j, options.unique, options.sparse, options.background, options.dropDups, options.min, options.max, options.v, options.expireAfterSeconds, options.name, cb)
+    .. function:: ensureIndex(fieldOrSpec, options, options.w, options.wtimeout, options.j, options.unique, options.sparse, options.background, options.dropDups, options.min, options.max, options.v, options.expireAfterSeconds, options.name, cb)
 
+        :deprecated:
         :param fieldOrSpec: Defines the index.
         :type fieldOrSpec: string | object
         :param options: Optional settings.
@@ -252,23 +271,26 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns index name
         :rtype: string
 
         Ensures that an index exists, if it does not it creates it
 
-    .. function:: leafnode.Collection.find(query, cb)
+    .. function:: find(query, cb)
 
         :param query: The cursor query object.
         :type query: object
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: xxx
         :rtype: Cursor
 
         Creates a cursor for a query that can be used to iterate over results from MongoDB. Note that query options are exposed through the Cursor api.
 
-    .. function:: leafnode.Collection.findAndModify(query, sort, doc, options, options.w, options.wtimeout, options.j, options.remove, options.upsert, options.new, options.fields, cb)
+    .. function:: findAndModify(query, sort, doc, options, options.w, options.wtimeout, options.j, options.remove, options.upsert, options.new, options.fields, cb)
 
+        :deprecated:
         :param query: Query object to locate the object to modify.
         :type query: object
         :param sort: If multiple docs match, choose the first one in the specified sort order as the object to manipulate.
@@ -294,11 +316,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~findAndModifyWriteOpResult
         :rtype: object
 
         Find and update a document.
 
-    .. function:: leafnode.Collection.findOne(query, options, options.limit, options.sort, options.fields, options.skip, options.hint, options.explain, options.snapshot, options.timeout, options.tailable, options.batchSize, options.returnKey, options.maxScan, options.min, options.max, options.showDiskLoc, options.comment, options.raw, options.readPreference, options.partial, options.maxTimeMS, cb)
+    .. function:: findOne(query, options, options.limit, options.sort, options.fields, options.skip, options.hint, options.explain, options.snapshot, options.timeout, options.tailable, options.batchSize, options.returnKey, options.maxScan, options.min, options.max, options.showDiskLoc, options.comment, options.raw, options.readPreference, options.partial, options.maxTimeMS, cb)
 
         :param query: Query for find Operation
         :type query: object
@@ -347,11 +370,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns the doc if found or null if not found
         :rtype: object
 
         Fetches the first document that matches the query
 
-    .. function:: leafnode.Collection.findOneAndDelete(query, options, options.projection, options.sort, options.maxTimeMS, cb)
+    .. function:: findOneAndDelete(query, options, options.projection, options.sort, options.maxTimeMS, cb)
 
         :param query: Document selection query.
         :type query: object
@@ -366,11 +390,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~findAndModifyWriteOpResult
         :rtype: object
 
         Find a document and delete it in one atomic operation, requires a write lock for the duration of the operation.
 
-    .. function:: leafnode.Collection.findOneAndReplace(query, replacement, options, options.projection, options.sort, options.maxTimeMS, options.upsert, options.returnOriginal, cb)
+    .. function:: findOneAndReplace(query, replacement, options, options.projection, options.sort, options.maxTimeMS, options.upsert, options.returnOriginal, cb)
 
         :param query: Document selection query.
         :type query: object
@@ -391,11 +416,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~findAndModifyWriteOpResult
         :rtype: object
 
         Find a document and replace it in one atomic operation, requires a write lock for the duration of the operation.
 
-    .. function:: leafnode.Collection.findOneAndUpdatea(query, update, options, options.projection, options.sort, options.maxTimeMS, options.upsert, options.returnOriginal, cb)
+    .. function:: findOneAndUpdatea(query, update, options, options.projection, options.sort, options.maxTimeMS, options.upsert, options.returnOriginal, cb)
 
         :param query: Document selection query.
         :type query: object
@@ -416,20 +442,22 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~findAndModifyWriteOpResult
         :rtype: object
 
         Find a document and update it in one atomic operation, requires a write lock for the duration of the operation.
 
-    .. function:: leafnode.Collection.getIndexes(cb)
+    .. function:: getIndexes(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns array of indexes each with name, namespace and key
         :rtype: array
 
         Retrieve all the indexes on the collection.
 
-    .. function:: leafnode.Collection.group(keys, condition, initial, reduce, finalize, command, options, options.readPreference, cb)
+    .. function:: group(keys, condition, initial, reduce, finalize, command, options, options.readPreference, cb)
 
         :param keys: An object, array or function expressing the keys to group by.
         :type keys: object | array | function | code
@@ -450,11 +478,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: returns results of the group command
         :rtype: array
 
         Run a group command across a collection
 
-    .. function:: leafnode.Collection.indexInformationa(options, options.full, cb)
+    .. function:: indexInformationa(options, options.full, cb)
 
         :param options: Optional settings.
         :type options: object
@@ -463,12 +492,14 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: The result object.
         :rtype: object
 
         Retrieves this collection's index information.
 
-    .. function:: leafnode.Collection.insert(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
+    .. function:: insert(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
 
+        :deprecated:
         :param docs: Documents to insert.
         :type docs: object | object
         :param options: Optional settings.
@@ -486,11 +517,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~insertWriteOpResult
         :rtype: object
 
         Inserts a single document or an array of documents into MongoDB.
 
-    .. function:: leafnode.Collection.insertMany(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
+    .. function:: insertMany(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
 
         :param docs: Documents to insert.
         :type docs: object
@@ -509,11 +541,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error xxx
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~insertWriteOpResult
         :rtype: object
 
         Inserts an array of documents into MongoDB.
 
-    .. function:: leafnode.Collection.insertObject(doc, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
+    .. function:: insertObject(doc, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
 
         :param doc: Document to insert.
         :type doc: object
@@ -532,11 +565,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: The inserted document.
         :rtype: object
 
         Inserts a single document into MongoDB.
 
-    .. function:: leafnode.Collection.insertObjects(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
+    .. function:: insertObjects(docs, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
 
         :param docs: Documents to insert.
         :type docs: object
@@ -555,11 +589,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: The inserted documents.
         :rtype: object
 
         Inserts an array of documents into MongoDB.
 
-    .. function:: leafnode.Collection.insertOnea(doc, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
+    .. function:: insertOne(doc, options, options.w, options.wtimeout, options.j, options.serializeFunctions, options.forceServerObjectId, cb)
 
         :param doc: Document to insert.
         :type doc: object
@@ -578,20 +613,22 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~insertOneWriteOpResult
         :rtype: object
 
         Inserts a single document into MongoDB.
 
-    .. function:: leafnode.Collection.isCappeda(cb)
+    .. function:: isCappeda(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: returns true if capped, false otherwise
         :rtype: boolean
 
         Returns if the collection is a capped collection
 
-    .. function:: leafnode.Collection.mapReduce(map, reduce, options, options.readPreference, options.out, options.query, options.sort, options.limit, options.keeptemp, options.finalize, options.scope, options.jsMode, options.verbose, cb)
+    .. function:: mapReduce(map, reduce, options, options.readPreference, options.out, options.query, options.sort, options.limit, options.keeptemp, options.finalize, options.scope, options.jsMode, options.verbose, cb)
 
         :param map: The mapping function.
         :type map: function | string
@@ -622,21 +659,24 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: returns the temporary collection with results of the mapReduce
         :rtype: Collection
 
         Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
 
-    .. function:: leafnode.Collection.reIndex(cb)
+    .. function:: reIndex(cb)
 
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: returns true if reindex succeeded, false otherwise
         :rtype: boolean
 
         Reindex all indexes on the collection Warning: reIndex is a blocking operation (indexes are rebuilt in the foreground) and will be slow for large collections.
 
-    .. function:: leafnode.Collection.remove(selector, options, options.w, options.wtimeout, options.j, options.single, cb)
+    .. function:: remove(selector, options, options.w, options.wtimeout, options.j, options.single, cb)
 
+        :deprecated:
         :param selector: The selector for the update operation.
         :type selector: object
         :param options: Optional settings.
@@ -652,12 +692,14 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~WriteOpResult
         :rtype: object
 
         Remove one or many documents.
 
-    .. function:: leafnode.Collection.removeMany(selector, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: removeMany(selector, options, options.w, options.wtimeout, options.j, cb)
 
+        :deprecated:
         :param selector: The Filter used to select the documents to remove
         :type selector: object
         :param options: Optional settings.
@@ -671,12 +713,14 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~deleteWriteOpResult
         :rtype: object
 
         Remove multiple documents.
 
-    .. function:: leafnode.Collection.removeObject(_id, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: removeObject(_id, options, options.w, options.wtimeout, options.j, cb)
 
+        :deprecated:
         :param _id: The _id of the doc to remove.
         :type _id: xxx
         :param options: Optional settings.
@@ -693,8 +737,9 @@ Methods
 
         Remove a single document.
 
-    .. function:: leafnode.Collection.removeObjects(_ids, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: removeObjects(_ids, options, options.w, options.wtimeout, options.j, cb)
 
+        :deprecated:
         :param _ids: The _ids of the docs to remove.
         :type _ids: xxx
         :param options: Optional settings.
@@ -711,8 +756,9 @@ Methods
 
         Remove multiple documents.
 
-    .. function:: leafnode.Collection.removeOne(selector, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: removeOne(selector, options, options.w, options.wtimeout, options.j, cb)
 
+        :deprecated:
         :param selector: The selector used to select the document to remove
         :type selector: object
         :param options: Optional settings.
@@ -726,11 +772,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~deleteWriteOpResult
         :rtype: object
 
         Remove a single document.
 
-    .. function:: leafnode.Collection.rename(newName, options, options.dropTarget, callback)
+    .. function:: rename(newName, options, options.dropTarget, callback)
 
         :param newName: New name of of the collection.
         :type newName: string
@@ -740,11 +787,12 @@ Methods
         :type options.dropTarget: boolean
         :param callback: The results callback
         :type callback: Collection~collectionResultCallback
+        :returns: returns Promise if no callback passed
         :rtype: Promise
 
         Rename the collection.
 
-    .. function:: leafnode.Collection.save(doc, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: save(doc, options, options.w, options.wtimeout, options.j, cb)
 
         :param doc: Document to save
         :type doc: object
@@ -759,11 +807,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~WriteOpResult
         :rtype: object
 
         Save a document. Simple full document replacement function. Not recommended for efficiency, use atomic operators and update instead for more efficient operations.
 
-    .. function:: leafnode.Collection.saveObject(doc, options, options.w, options.wtimeout, options.j, cb)
+    .. function:: saveObject(doc, options, options.w, options.wtimeout, options.j, cb)
 
         :param doc: Document to save.
         :type doc: object
@@ -778,11 +827,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error If exactly 1 document is not saved.
+        :returns: Returns true iff save resulted in an upsert.
         :rtype: boolean
 
         Save a document. Simple full document replacement function. Not recommended for efficiency, use atomic operators and update instead for more efficient operations. XXX: this only seems to report "upsert"s appropriately when you set the _id explicitly...
 
-    .. function:: leafnode.Collection.stats(options, options.scale, cb)
+    .. function:: stats(options, options.scale, cb)
 
         :param options: Optional settings.
         :type options: object
@@ -791,12 +841,14 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: returns collection statistics
         :rtype: object
 
         Get all the collection statistics.
 
-    .. function:: leafnode.Collection.update(query, doc, options, options.w, options.wtimeout, options.j, options.upsert, options.multi, cb)
+    .. function:: update(query, doc, options, options.w, options.wtimeout, options.j, options.upsert, options.multi, cb)
 
+        :deprecated:
         :param query: The selector for the update operation.
         :type query: object
         :param doc: The update document.
@@ -816,11 +868,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~updateWriteOpResult
         :rtype: object
 
         Updates documents.
 
-    .. function:: leafnode.Collection.updateMany(query, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
+    .. function:: updateMany(query, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
 
         :param query: The query used to select the document to update
         :type query: object
@@ -839,11 +892,12 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~updateWriteOpResult
         :rtype: object
 
         Update multiple documents.
 
-    .. function:: leafnode.Collection.updateObject(_id, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
+    .. function:: updateObject(_id, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
 
         :param _id: The _id of the doc to update.
         :type _id: xxx
@@ -865,7 +919,7 @@ Methods
 
         Update a single document.
 
-    .. function:: leafnode.Collection.updateObjects(_ids, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
+    .. function:: updateObjects(_ids, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
 
         :param _ids: The _ids of the docs to update.
         :type _ids: xxx
@@ -887,7 +941,7 @@ Methods
 
         Update multiple documents.
 
-    .. function:: leafnode.Collection.updateOne(query, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
+    .. function:: updateOne(query, update, options, options.upsert, options.w, options.wtimeout, options.j, cb)
 
         :param query: The query used to select the document to update
         :type query: object
@@ -906,6 +960,7 @@ Methods
         :param cb: execute asynchronously if present (signature: cb(err, result))
         :type cb: function
         :throws: Error 
+        :returns: see: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#~updateWriteOpResult
         :rtype: object
 
         Update a single document.
